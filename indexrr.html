@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /*喜报*/
+        .tc{ text-align: center;}
+        .xibao{  z-index:1000;  position:fixed; left:15px; bottom:15px; }
+        .xibao_con{ width:180px; height:320px; text-align: center; } 
+        .xibao_con .text_normal { color:#fceb67; padding-top:90px; } 
+        .xibao_con .text_normal .department{ display:none;}
+        .xibao_con .text_01{ color:#fdf684; padding-top:15px; text-shadow:2px 2px 2px #d23900;}
+        .xibao_con .text_01 .padding_top{ padding-top:110px; }
+        .xibao_con .text_02{ padding-top:16px; color:#333;}
+        .xibao_con .text_02 .department{ color:#fff;}
+        .xibao_con .text_02 .padding_top{ padding-top:60px;}
+        .xibao_con .text_02 b{ color:#ce0005;} 
+        .xibao_con .text_03{ padding-top:14px; color:#fdef8c; text-shadow:2px 2px 2px #aa0a0a; }
+        .xibao_con .text_03 .department{ color:#ce1b17; text-shadow:none;}
+        .xibao_con .text_03 .padding_top{ padding-top:75px;}
+        .xibao_con .xb_close{ width:30px; height:30px; line-height:30px; background-color:#fff; color:#333; right:0; top:0; position:absolute; opacity: 0.4; }
+        .xibao_con .xb_close:hover{ background-color:#666; color:#999;}
+        /*碎片*/
+        .slice{
+
+			-webkit-perspective:600px;
+
+		}
+
+		.slice p{
+
+			position: absolute;
+
+			width: 140px;
+
+			height: 100px;
+
+			background-image:url(images/0.jpg);
+
+			font-size: 40px;
+
+		}
+
+		.slice.fei p{
+
+			opacity: 0;
+
+		}
+
+		.slice.fei p:nth-child(1){-webkit-transform:rotateX(30deg) rotateY(10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(2){-webkit-transform:rotateX(330deg) rotateY(10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(3){-webkit-transform:rotateX(3450deg) rotateY(10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(4){-webkit-transform:rotateX(-30deg) rotateY(-10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(5){-webkit-transform:rotateX(330deg) rotateY(10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(6){-webkit-transform:rotateX(40deg) rotateY(20deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(7){-webkit-transform:rotateX(340deg) rotateY(10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(8){-webkit-transform:rotateX(3450deg) rotateY(60deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(9){-webkit-transform:rotateX(230deg) rotateY(10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(10){-webkit-transform:rotateX(20deg) rotateY(20deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(11){-webkit-transform:rotateX(30deg) rotateY(10deg) translateZ(400px);}
+
+		.slice.fei p:nth-child(12){-webkit-transform:rotateX(10deg) rotateY(10deg) translateZ(400px);}
+
+
+    </style>
+</head>
+<body>
+    <div class="xibao"  id="xibao"></div> 
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script>
+        $(function(){
+            var xibao = new Xibao();
+            xibao.init();
+
+            //烟花效果
+            for (var i = 0; i < parseInt(Math.random() * 50) + 30; i++) {
+                var b = new Boom(200, 300);
+                b.mDrop();
+            }
+            //关掉喜报
+            $('.xb_close').on('click', function () {
+                $('.xibao').empty().hide();
+            });
+
+            var slice = new Slice();
+            slice.fly();
+        })
+        //喜报实体
+        function Xibao(ops){
+            var that = this;
+            var defaults = {
+                departmentName : '',
+                adminName : '',
+                payTimeText : '',
+                productName : '',
+                priceText : ''
+            } 
+            ops = $.extend(defaults,ops);
+            var xibaoDiv = document.getElementById("xibao"); 
+            var inner = '<div class="xibao_con animated-fast tada"> ' +
+                    '<div class="text_normal" >' +
+                    '<p class="f12 department">' + ops.departmentName + '</p>' +
+                    '<b class="f20 db padding_top">恭喜<span class="ml10">' + ops.adminName + '</span></b>' +
+                    '<p class="f14" style="padding:5px 30px 0;">于' + ops.payTimeText + '进款' + ops.productName + '项目</p>' +
+                    '<b class="f26 money">'+
+                        '<span>' + ops.priceText +'</span>万'+
+                    '</b>'+
+                '</div >'+
+                '<a href= "javascript:;" title= "关闭" class="xb_close"> X </a>' +
+                '</div >';
+            xibaoDiv.innerHTML = inner; 
+            that.ele = xibaoDiv;
+            that.ele.style.display = 'block';
+            if (ops.departmentName === '营业一部') {
+                $('.xibao_con').css({
+                    "background": "url(./images/bg01.jpg) no-repeat",
+                    "background-size": "100% 100%"
+                });
+                $(".text_normal").removeClass('text_normal').addClass('text_01');
+            }
+            else if (ops.departmentName === '营业二部') {
+                $('.xibao_con').css({
+                    "background": "url(./images/bg02.jpg) no-repeat",
+                    "background-size": "100% 100%"
+                });
+                $(".text_normal").removeClass('text_normal').addClass('text_02');
+            }
+            else if (ops.departmentName === '营业三部') {
+                $('.xibao_con').css({
+                    "background": "url(./images/bg03.jpg) no-repeat",
+                    "background-size": "100% 100%"
+                });
+                $(".text_normal").removeClass('text_normal').addClass('text_03');
+            }
+            else {
+                $('.xibao_con').css({
+                    "background": "url(./images/bg.jpg) no-repeat",
+                    "background-size": "100% 100%"
+                });
+            };
+        };
+        Xibao.prototype.init = function(){
+            var that = this;
+            that.ele.style.display = 'block';
+        };
+        Xibao.prototype.close = function(){
+            var that = this;
+            that.ele.style.display = 'none';
+        }
+        //烟花实体
+        function Boom(x,y){
+            var mDiv = document.createElement("div");
+            mDiv.style.width = "5px";
+            mDiv.style.height = "5px";
+            mDiv.style.background = $.randomColor();
+            mDiv.style.position = "absolute";
+            mDiv.style.left = x + "px";
+            mDiv.style.top = y + "px";
+            mDiv.style.zIndex = "1000";
+            mDiv.style.borderRadius = "100%";
+            document.body.appendChild(mDiv);
+            this.ele = mDiv;
+            //x,y 方向的增量
+            this.xSpeed = (Math.random() > 0.5 ? 1 : -1) * parseInt(Math.random() * 20);
+            this.ySpeed = (Math.random() > 0.5 ? 1 : -1) * parseInt(Math.random() * 20);
+        }
+        Boom.prototype.mDrop = function () {
+            var self = this;
+            var timer = setInterval(function () {
+                self.ySpeed++;
+                self.ele.style.left = parseInt($.getStyle(self.ele, "left")) + self.xSpeed + "px";
+                self.ele.style.top = parseInt($.getStyle(self.ele, "top")) + self.ySpeed + "px";
+
+                if (parseInt($.getStyle(self.ele, "top")) > 500 || parseInt($.getStyle(self.ele, "left")) < 0 || parseInt($.getStyle(self.ele, "left")) > 1200) {
+                    clearInterval(timer);
+                    document.body.removeChild(self.ele);
+                }
+            }, 60);
+        }
+        
+        //碎片实体
+        function Slice(){
+            var xibao = document.getElementById("happyPaper");
+            var slice = document.createElement("div");
+            var inner = '<p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p><p>8</p><p>9</p><p>10</p><p>11</p><p>12</p>';
+            slice.innerHTML = inner;
+            xibao.append(slice);
+            this.ele = slice;
+        };
+        Slice.prototype.fly = function(){
+
+        }
+        //封装公共方法   
+        $.extend({
+            //生成随机色
+            randomColor:function(){
+                return "rgb(" + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + ")";
+            },
+            //获取样式
+            getStyle:function(ele){
+                if (window.getComputedStyle) {
+                    return getComputedStyle(ele, null)[attr];
+                } else {
+                    return ele.currentStyle[attr];
+                }
+            }
+        }) 
+    </script>
+</body>
+</html>
